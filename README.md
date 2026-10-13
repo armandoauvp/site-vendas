@@ -24,6 +24,14 @@ pasta do repositório (o Chrome precisa dos caminhos completos):
 Ou abra o `pdf/guia-auvp-escola.htm` no Chrome, `Ctrl+P` → Salvar como PDF,
 com margens "Nenhuma" e "Gráficos de plano de fundo" marcado.
 
+- **Botão do WhatsApp (última página):** ainda sem link. Quando houver o número
+  do Closer, troque no fim do `guia-auvp-escola.htm` o `<span class="cta">` por
+  `<a class="cta" href="https://wa.me/55DDDNUMERO">` (e o `</span>` por `</a>`)
+  e gere o PDF de novo.
+- **Capa e fechamento** usam `pdf/img/capa-fundo.jpg` e `pdf/img/fecho-fundo.jpg`,
+  fotos com o escurecimento já aplicado. Não volte a pôr degradê transparente
+  por cima de foto: isso deixa o PDF lento para rolar.
+
 ## Versões
 
 | Versão | Onde está | Commit |
