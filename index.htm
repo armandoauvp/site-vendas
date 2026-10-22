@@ -65,10 +65,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .trilho{position:fixed;z-index:40;top:0;bottom:0;left:0;width:var(--trilho);background:var(--trilho-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-right:1px solid var(--vidro-borda);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 50px rgba(0,0,0,.25);transform:translateX(-100%);visibility:hidden;transition:transform .28s var(--mola),visibility 0s .28s}
 body.gaveta .trilho{transform:none;visibility:visible;transition:transform .28s var(--mola)}
 body.gaveta .fundo{opacity:1;pointer-events:auto}
-.abre-menu{position:fixed;z-index:38;top:14px;left:14px;width:42px;height:42px;display:grid;place-items:center;border-radius:3px;color:var(--tinta);background:var(--sup-forte);border:1px solid var(--vidro-borda);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 26px -12px rgba(0,0,0,.45);transition:background .18s,border-color .18s,color .18s}
-.abre-menu:hover,.abre-menu[aria-expanded="true"]{border-color:rgba(239,191,78,.6);color:var(--gold-deep)}
+/* só o ícone, sem caixa: preto nas telas claras e branco nas telas com
+   foto ou vídeo de fundo (e no modo escuro, onde o --tinta já é claro) */
+.abre-menu{position:fixed;z-index:38;top:14px;left:14px;width:42px;height:42px;display:grid;place-items:center;border-radius:3px;color:var(--tinta);background:none;border:0;transition:color .18s}
+body.tela-escura .abre-menu{color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.abre-menu:hover,.abre-menu[aria-expanded="true"]{color:var(--gold-deep)}
+body.tela-escura .abre-menu:hover,body.tela-escura .abre-menu[aria-expanded="true"]{color:var(--gold)}
 .marca{display:flex;align-items:center;gap:11px;padding:18px 14px 16px;border-bottom:1px solid var(--vidro-borda);min-height:73px}
 .selo{flex:none;width:42px;height:auto;display:block}
+/* logo oficial da AUVP Escola (designsystemauvp): o SVG já traz a área de
+   segurança em volta, por isso a margem negativa à esquerda alinha o olho
+   com o resto do menu. Preta no modo claro, branca no escuro */
+.marca-logo{display:block;height:50px;width:auto;margin-left:-14px}
+.marca-logo.escuro,body.escuro .marca-logo.claro{display:none}
+body.escuro .marca-logo.escuro{display:block}
 .marca-txt{flex:1;min-width:0;overflow:hidden}
 .marca-txt b{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;display:block;color:var(--tinta);white-space:nowrap}
 .marca-txt span{font-family:var(--cta);font-weight:700;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);white-space:nowrap}
@@ -123,7 +133,7 @@ body:not(.escuro) .ajuda{background:rgba(255,255,255,.95)}
 .visor img{display:block;width:100%;height:auto;background:#0c0c0e}
 .visor-x{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:18px;line-height:1;color:#fff;background:rgba(9,9,11,.55);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.18s}
 .visor-x:hover{background:rgba(9,9,11,.8)}
-.chip.lente.aberta{border-color:rgba(239,191,78,.7);background:rgba(239,191,78,.24)}
+.chip.lente.aberta{background:#fff;color:#09090b;border-color:#fff}
 @media (max-width:860px){.visor{width:min(92vw,620px)}}
 
 
@@ -133,8 +143,15 @@ body:not(.escuro) .ajuda{background:rgba(255,255,255,.95)}
 .palco{position:relative;overflow:hidden;background:var(--fundo)}
 .progresso{position:absolute;top:0;left:0;height:2px;width:100%;z-index:25;background:var(--gold);box-shadow:0 0 10px rgba(239,191,78,.5);transform:scaleX(0);transform-origin:0 50%;transition:transform .38s var(--mola)}
 .topo{display:none;align-items:center;gap:12px;padding:10px 14px;background:var(--sup-forte);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--vidro-borda)}
-.topo b{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:-.01em}
-.hamb{width:34px;height:34px;display:grid;place-items:center;border-radius:3px;color:var(--tinta2)}
+.topo b{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:-.01em}
+.topo b.troca{animation:entra .32s var(--mola) both}
+/* contador da etapa: o número atual em destaque, o total apagado */
+.topo-n{justify-self:end;font-family:var(--cta);font-weight:600;font-size:11px;letter-spacing:.04em;color:var(--tinta3);padding:5px 8px;border:1px solid var(--vidro-borda);border-radius:3px;font-variant-numeric:tabular-nums}
+.topo-n i{font-style:normal;font-weight:700;color:var(--gold-deep)}
+/* no celular a barra de progresso do topo some: ela passa para a base do cabeçalho */
+.topo-prog{position:absolute;left:0;bottom:-1px;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:0 50%;transition:transform .38s var(--mola)}
+.hamb{justify-self:start;width:40px;height:40px;margin-left:-6px;display:grid;place-items:center;border-radius:3px;color:var(--tinta)}
+.hamb:hover,.hamb[aria-expanded="true"]{color:var(--gold-deep);background:var(--hover)}
 .tela{display:none;position:absolute;inset:0;overflow-y:auto}
 .tela.ativa{display:block}
 .tela.ativa .in{animation:entra .32s var(--mola) both}
@@ -192,8 +209,7 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4vw,56px);lin
 .quadro.midia.foco .faixa{inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(30px,5vw,66px);
   background:radial-gradient(ellipse 44% 50% at 50% 40%,rgba(9,9,11,0) 0%,rgba(9,9,11,.3) 58%,rgba(9,9,11,.72) 100%),linear-gradient(0deg,rgba(9,9,11,.94) 0%,rgba(9,9,11,.55) 24%,transparent 54%)}
 .tela.ativa .quadro.foco{animation:none}
-.tela.ativa .quadro.foco .kicker{animation:surge .7s var(--mola) .15s backwards}
-.tela.ativa .quadro.foco h1{animation:surge .75s var(--mola) .35s backwards}
+.tela.ativa .quadro.foco h1{animation:surge .75s var(--mola) .2s backwards}
 .quadro.centro .chip:nth-child(1),.quadro.centro .num:nth-child(1){animation-delay:.62s}
 .quadro.centro .chip:nth-child(2),.quadro.centro .num:nth-child(2){animation-delay:.88s}
 .quadro.centro .chip:nth-child(3),.quadro.centro .num:nth-child(3){animation-delay:1.14s}
@@ -212,21 +228,18 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4vw,56px);lin
 .faixa .legenda{margin:15px 0 0;font-size:16px;line-height:1.55;color:rgba(255,255,255,.72);max-width:56ch}
 .legenda{font-size:16px;line-height:1.6;color:var(--tinta2);margin:14px 0 0;max-width:56ch}
 .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
-/* tags em vidro líquido sobre a mídia de fundo */
-.chip{position:relative;overflow:hidden;overflow:clip;isolation:isolate;display:inline-flex;align-items:center;gap:8px;font-family:var(--cta);font-weight:600;font-size:12px;letter-spacing:.01em;border-radius:3px;padding:12px 19px;color:rgba(255,255,255,.96);
-  background:linear-gradient(160deg,rgba(255,255,255,.19),rgba(255,255,255,.09) 55%,rgba(255,255,255,.13));
-  backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 12px 38px -16px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -8px 18px -12px rgba(255,255,255,.14);
-  transition:transform .32s var(--mola),border-color .32s,box-shadow .32s,background .32s}
-.chip::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.22),transparent 46%)}
-.chip:hover{transform:translateY(-2px);background:linear-gradient(160deg,rgba(255,255,255,.25),rgba(255,255,255,.12) 55%,rgba(255,255,255,.17));border-color:rgba(255,255,255,.26);box-shadow:0 16px 42px -16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.42)}
+/* tags sobre a mídia de fundo: sem fundo, só um contorno branco fino; no
+   hover o fundo fica branco e o texto (e o ícone, que usa currentColor) escurece */
+.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--cta);font-weight:600;font-size:12px;letter-spacing:.01em;border-radius:3px;padding:12px 19px;color:#fff;
+  background:transparent;border:1px solid rgba(255,255,255,.85);
+  transition:transform .32s var(--mola),background .25s,color .25s,border-color .25s}
+.chip:hover,.chip:focus-visible{transform:translateY(-2px);background:#fff;color:#09090b;border-color:#fff}
 .chip.lente{cursor:zoom-in}
 .chip.leva svg{opacity:.7;transition:transform .22s var(--mola),opacity .2s}
 .chip.leva:hover svg{opacity:1;transform:translateX(3px)}
 .chip.lente svg{opacity:.65;transition:opacity .2s,transform .2s}
 .chip.lente:hover svg{opacity:1;transform:scale(1.1)}
-.chip.copy{border-color:rgba(239,191,78,.45);box-shadow:0 12px 38px -16px rgba(0,0,0,.55),inset 0 1px 0 rgba(239,191,78,.4)}
+.chip.copy{border-color:var(--gold)}
 .galeria{min-height:100%;padding:76px 56px 56px;display:flex;flex-direction:column}
 .galeria .cab{margin-bottom:28px}
 .grade{display:grid;gap:15px;flex:1}
@@ -238,6 +251,12 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4vw,56px);lin
 .foto .cimg{position:absolute;inset:0;background-image:var(--capa);background-repeat:no-repeat;z-index:0}
 .foto .cimg{background-size:cover;background-position:center top;transition:transform .55s var(--mola)}
 .foto.capa:hover .cimg{transform:scale(1.05)}
+/* mapa mental: a imagem é o quadro inteiro (moldura preta e amarela e os
+   textos dos lados). A altura em 117% e a posição deixam à vista só o miolo
+   bege, com o porquinho e o "Finanças Pessoais" na parte de cima do card,
+   e o véu fica mais curto para não escurecer o título */
+.foto[data-foco="mapa"] .cimg{background-size:auto 117%;background-position:49% 106%}
+.foto[data-foco="mapa"] .veu{background:linear-gradient(180deg,rgba(9,9,11,0) 0%,rgba(9,9,11,0) 70%,rgba(9,9,11,.75) 84%,rgba(9,9,11,.96) 100%)}
 .foto.capa .ph{display:none}
 /* véu do tamanho do card inteiro: a transição fica longa e sem emenda visível */
 .foto .veu{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(9,9,11,0) 0%,rgba(9,9,11,0) 36%,rgba(9,9,11,.26) 54%,rgba(9,9,11,.68) 72%,rgba(9,9,11,.92) 87%,rgba(9,9,11,.97) 100%)}
@@ -269,14 +288,16 @@ a.foto.capa.play:hover::after{transform:translate(-50%,-58%) scale(1.08)}
 #calculadoras .calc-ic svg{width:17px;height:17px}
 #calculadoras .calc b{font-size:16px}
 #calculadoras .calc small{font-size:12px;line-height:1.45}
-.calc{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-height:286px;padding:26px 24px 52px;border:0;border-radius:3px;overflow:hidden;overflow:clip;text-decoration:none;color:#09090b;background:linear-gradient(152deg,#D3AC50 0%,#BB963E 62%,#AA893C 100%);box-shadow:0 18px 38px -22px rgba(120,86,10,.55);transition:transform .3s var(--mola),box-shadow .3s}
+/* ícone e título na mesma linha, alinhados pelo centro do ícone; o texto
+   de apoio ocupa a largura toda embaixo */
+.calc{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;align-content:start;gap:14px 12px;min-height:286px;padding:26px 24px 52px;border:0;border-radius:3px;overflow:hidden;overflow:clip;text-decoration:none;color:#09090b;background:linear-gradient(152deg,#D3AC50 0%,#BB963E 62%,#AA893C 100%);box-shadow:0 18px 38px -22px rgba(120,86,10,.55);transition:transform .3s var(--mola),box-shadow .3s}
 /* o arco claro do canto superior direito, como no material de origem */
 .calc::before{content:"";position:absolute;z-index:0;top:-42%;right:-30%;width:88%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.1);pointer-events:none}
 .calc>*{position:relative;z-index:1}
 .calc:hover{transform:translateY(-4px);box-shadow:0 26px 50px -20px rgba(120,86,10,.7)}
 .calc-ic{width:46px;height:46px;flex:none;border-radius:3px;display:grid;place-items:center;background:rgba(9,9,11,.13);color:#09090b}
 .calc b{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.2;letter-spacing:-.015em;color:#09090b}
-.calc small{font-size:13px;line-height:1.5;color:rgba(9,9,11,.82)}
+.calc small{grid-column:1/-1;font-size:13px;line-height:1.5;color:rgba(9,9,11,.82)}
 /* a pílula dourada sumiria no card dourado: aqui ela inverte */
 .calc .acesso{background:#09090b;color:var(--gold)}
 a.calc:hover .acesso{background:#fff;color:#09090b}
@@ -385,6 +406,44 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 .eco-modal-corpo p{margin:0;font-size:clamp(13px,1.05vw,16px);line-height:1.5;color:rgba(255,255,255,.82);max-width:62ch}
 .eco-modal-x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:18px;line-height:1;color:#fff;background:rgba(9,9,11,.55);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.18s;cursor:pointer}
 .eco-modal-x:hover{background:rgba(9,9,11,.8)}
+.eco-modal-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 14px;border-radius:3px;background:var(--gold);color:#09090b;font-family:var(--cta);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:background .2s}
+.eco-modal-link:hover{background:#fff}
+.eco-modal-link[hidden]{display:none}
+
+/* ecossistema V2: as duas frentes lado a lado em mosaico de fotos,
+   separadas só por um fio fino. A frente da esquerda tem 2 colunas e a da direita 3, cada
+   uma com 3 linhas: o destaque ocupa 2 (esquerda) ou 3 (direita) linhas e
+   os demais preenchem o resto, sem sobrar buraco. */
+.eco2{flex:1;display:grid;grid-template-columns:minmax(0,2fr) 1px minmax(0,3fr);gap:clamp(18px,2.2vw,36px);margin-top:clamp(16px,2.6vh,30px)}
+.eco2-frente{display:flex;flex-direction:column;min-width:0}
+.eco2-cab{display:flex;flex-direction:column;gap:5px;margin-bottom:clamp(10px,1.6vh,16px)}
+.eco2-cab b{font-family:var(--display);font-weight:700;font-size:clamp(19px,1.8vw,26px);line-height:1.1;letter-spacing:-.02em;color:var(--tinta)}
+.eco2-frente.dir .eco2-cab{text-align:right}
+.eco2-grade{flex:1;display:grid;gap:clamp(8px,.9vw,14px);grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(clamp(112px,18vh,230px),1fr))}
+.eco2-frente.dir .eco2-grade{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ecard.destaque{grid-row:span 2}
+.eco2-frente.dir .ecard.destaque{grid-row:span 3}
+.ecard{position:relative;isolation:isolate;overflow:hidden;min-height:0;padding:0;border-radius:3px;text-align:left;background:#0c0c0e;border:1px solid var(--vidro-borda);
+  animation:sobe .5s var(--mola) backwards;animation-delay:calc(var(--j,0)*55ms + 140ms);
+  transition:transform .35s var(--mola),box-shadow .35s,border-color .35s}
+.ecard-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transition:transform .7s var(--mola)}
+.ecard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(9,9,11,.94) 0%,rgba(9,9,11,.6) 36%,rgba(9,9,11,.06) 72%)}
+.ecard-txt{position:absolute;left:0;right:0;bottom:0;padding:clamp(11px,1.2vw,18px);color:#fff}
+.ecard b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(14px,1.2vw,19px);line-height:1.15;letter-spacing:-.01em}
+.ecard.destaque b{font-size:clamp(20px,2vw,30px)}
+/* a descrição aparece no destaque e, nos demais, ao passar o mouse */
+.ecard small{display:block;max-height:0;opacity:0;overflow:hidden;font-size:clamp(11.5px,.9vw,13.5px);line-height:1.45;color:rgba(255,255,255,.82);transition:max-height .45s var(--mola),opacity .3s,margin .3s}
+.ecard:hover small,.ecard:focus-visible small{max-height:7em;opacity:1;margin-top:6px}
+.ecard.destaque small{max-height:12em;opacity:1;margin-top:6px}
+.ecard-mais{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:17px;line-height:1;font-weight:500;color:#fff;border:1px solid rgba(255,255,255,.85);opacity:0;transition:transform .35s var(--mola),opacity .3s,background .25s,color .25s}
+.ecard:hover{transform:translateY(-3px);border-color:rgba(239,191,78,.75);box-shadow:0 18px 34px -16px rgba(184,134,11,.75)}
+.ecard:hover .ecard-img{transform:scale(1.06)}
+.ecard:hover .ecard-mais,.ecard:focus-visible .ecard-mais{transform:rotate(90deg);opacity:1;background:#fff;color:#09090b}
+/* sem mouse não há hover: o "+" fica sempre à vista */
+@media (hover:none){.ecard-mais{opacity:1}}
+.eco2-divisa{margin-top:clamp(44px,6.5vh,70px);background:linear-gradient(180deg,transparent,var(--linha-f) 18%,var(--linha-f) 82%,transparent)}
+@keyframes pulsa{0%,100%{box-shadow:0 0 0 0 rgba(239,191,78,.35)}50%{box-shadow:0 0 0 12px rgba(239,191,78,0)}}
+.eco2-dica{display:flex;align-items:center;justify-content:center;gap:8px;margin:clamp(14px,2vh,22px) 0 0;font-family:var(--cta);font-weight:600;font-size:12px;letter-spacing:.04em;color:var(--gold-deep)}
 
 /* divisória entre a grade fixa e os módulos avançados */
 .crono-divisa{display:flex;align-items:center;gap:16px;margin:36px 0 26px;color:var(--gold-deep)}
@@ -413,17 +472,18 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 
 
 /* ---------- números em destaque (Quem somos nós?) ---------- */
-.numeros{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:32px}
+/* uma régua só: os números lado a lado, divididos por fios finos, em
+   colunas fixas (4 ou 2) - nunca sobra bloco solto numa linha nem a régua
+   vira uma pilha estreita quando a faixa centralizada encolhe */
+.numeros{--cols:4;--fio:rgba(255,255,255,.24);display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));width:min(100%,940px);margin:34px auto 0;border-top:1px solid var(--fio);border-bottom:1px solid var(--fio)}
 /* na Escola a régua acompanha o texto, que é alinhado à esquerda */
-#t3 .numeros{justify-content:flex-start}
-.num{position:relative;overflow:clip;isolation:isolate;min-width:190px;max-width:280px;padding:18px 22px 16px;border-radius:3px;text-align:center;
-  background:linear-gradient(160deg,rgba(255,255,255,.19),rgba(255,255,255,.09) 55%,rgba(255,255,255,.13));
-  backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 12px 38px -16px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.3)}
-.num::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.22),transparent 46%)}
-.num b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(30px,3.4vw,46px);line-height:1;letter-spacing:-.03em;color:#fff}
-.num span{display:block;margin:9px auto 0;font-family:var(--cta);font-weight:600;font-size:11.5px;line-height:1.4;letter-spacing:.02em;color:rgba(255,255,255,.84);max-width:24ch}
+#t3 .numeros{--cols:2;width:min(100%,520px);margin-left:0}
+.num{padding:22px 16px 20px;text-align:center}
+.num+.num{border-left:1px solid var(--fio)}
+.num b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(36px,4.2vw,60px);line-height:1;letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num b em{font-style:normal}
+.num b i{font-style:normal}
+.num span{display:block;margin:10px auto 0;font-family:var(--cta);font-weight:600;font-size:11px;line-height:1.45;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.78);max-width:22ch}
 
 /* cronograma de modulos */
 .crono{display:flex;flex-direction:column;gap:15px}
@@ -472,6 +532,43 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 .mcard.bonus .medalhao{border-color:rgba(239,191,78,.4)}
 
 /* ============================================================
+   TRILHA DE ETAPAS
+   O caminho da apresentação sempre à vista na lateral direita: um
+   ponto por tela, o fio dourado enchendo até a tela atual e o nome
+   aparecendo ao passar o mouse. No celular vira uma barra embaixo.
+   ============================================================ */
+.etapas{position:fixed;z-index:30;right:24px;top:50%;transform:translateY(-50%);opacity:.55;transition:opacity .35s,transform .4s var(--mola);display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 5px;border-radius:999px;background:var(--sup-forte);border:1px solid var(--vidro-borda);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 30px -18px rgba(0,0,0,.35)}
+.et-lista{position:relative;list-style:none;margin:0;padding:2px 0;display:flex;flex-direction:column;gap:2px}
+.et-lista li{display:flex}
+/* trilho cinza e, por cima, o fio dourado até o ponto atual */
+.et-lista::before,.et-lista::after{content:"";position:absolute;left:50%;top:13px;width:2px;margin-left:-1px;border-radius:2px}
+.et-lista::before{bottom:13px;background:var(--trilha-bg)}
+.et-lista::after{height:max(0px,calc(var(--fim-y,13px) - 13px));background:var(--gold);transition:height .55s var(--mola)}
+/* sem o padding padrão do botão: com ele a área útil ficava menor que o
+   ponto atual e a grade empurrava o círculo para fora do eixo do fio */
+.et-pt{position:relative;z-index:1;display:grid;place-items:center;width:22px;height:22px;padding:0;border-radius:50%}
+.et-pt.inicio-cap{margin-top:10px}
+.et-pt::before{content:"";box-sizing:border-box;width:9px;height:9px;border-radius:50%;background:var(--chapa);border:1.5px solid var(--linha-f);transition:transform .35s var(--mola),background .3s,border-color .3s,width .35s var(--mola),height .35s var(--mola)}
+.et-pt.feito::before{background:var(--gold);border-color:var(--gold)}
+.et-pt:hover::before{transform:scale(1.35);border-color:var(--gold)}
+.et-pt.on::before{width:15px;height:15px;background:var(--gold);border-color:var(--gold);animation:pulsa 2.4s ease-in-out infinite}
+.et-rot{position:absolute;right:calc(100% + 14px);top:50%;transform:translate(8px,-50%);opacity:0;visibility:hidden;pointer-events:none;white-space:nowrap;padding:7px 11px 8px;border-radius:4px;background:var(--tinta);color:var(--chapa);font-family:var(--display);font-weight:600;font-size:14px;line-height:1.2;text-align:right;box-shadow:0 10px 24px -12px rgba(0,0,0,.5);transition:opacity .2s,transform .3s var(--mola),visibility .2s}
+.et-rot small{display:block;margin-bottom:2px;font-family:var(--cta);font-weight:700;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.et-pt:hover .et-rot,.et-pt:focus-visible .et-rot{opacity:1;visibility:visible;transform:translate(0,-50%)}
+.et-seta{width:24px;height:24px;padding:0;display:grid;place-items:center;border-radius:50%;color:var(--tinta2);transition:color .2s,background .2s}
+.et-seta.desce svg{transform:rotate(180deg)}
+.et-seta:hover:not(:disabled){color:var(--gold-deep);background:var(--gold-bg)}
+.et-seta:disabled{opacity:.28;cursor:default}
+/* em repouso a trilha fica apagada; acende com o mouse, o foco ou a troca de tela */
+.etapas:hover,.etapas:focus-within,.etapas.acesa{opacity:1}
+/* folga à direita para o conteúdo não passar por baixo da trilha
+   (a V1 das órbitas calcula o raio pela largura e fica como está) */
+@media (min-width:861px){.galeria,#t10b .eco-wrap{padding-right:84px}#t10b .eco-wrap{padding-left:84px}}
+/* dica da primeira visita: um balão que aponta para a trilha */
+.et-dica{position:absolute;right:calc(100% + 12px);bottom:4px;padding:7px 11px;border-radius:4px;background:var(--gold);color:#09090b;font-family:var(--cta);font-weight:700;font-size:11px;letter-spacing:.04em;white-space:nowrap;opacity:0;transform:translateX(8px);pointer-events:none;transition:opacity .35s,transform .45s var(--mola)}
+.et-dica.ver{opacity:1;transform:none}
+
+/* ============================================================
    7. RESPONSIVO
    ============================================================ */
 @media (max-width:1080px){
@@ -483,7 +580,7 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
   .app{grid-template-columns:1fr;height:auto}
   .trilho{width:278px}
   .abre-menu{display:none}
-  .topo{display:flex;position:sticky;top:0;z-index:20}
+  .topo{display:grid;grid-template-columns:minmax(56px,1fr) minmax(0,auto) minmax(56px,1fr);position:sticky;top:0;z-index:20;gap:10px;min-height:56px;padding:8px 14px}
   .palco{overflow:visible}
   .progresso{display:none}
   .tela{position:static}
@@ -515,6 +612,40 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
   .eorb-img{grid-column:1;grid-row:1/3;width:64px;height:64px}
   .eorb small{display:block;grid-column:2;grid-row:2;font-size:12.5px;line-height:1.4;color:var(--tinta3)}
   .avancados{grid-template-columns:1fr}
+  #t3 .faixa{align-items:center;text-align:center}
+  #t3 .faixa .legenda{margin-left:auto;margin-right:auto}
+  #t3 .numeros{margin-left:auto}
+  /* no celular, 2x2: os fios passam a dividir também as linhas */
+  .numeros{--cols:2}
+  .num{padding:18px 10px 16px}
+  .num:nth-child(odd){border-left:0}
+  .num:nth-child(n+3){border-top:1px solid var(--fio)}
+  .num b{font-size:34px}
+  .num span{font-size:9.5px}
+  /* trilha deitada, numa barra embaixo; a página ganha folga para ela */
+  .palco{padding-bottom:64px}
+  .etapas{top:auto;bottom:max(10px,env(safe-area-inset-bottom));right:50%;transform:translateX(50%);flex-direction:row;padding:4px 6px}
+  .et-lista{flex-direction:row;padding:0 2px}
+  .et-lista::before,.et-lista::after{left:13px;top:50%;width:auto;height:2px;margin:-1px 0 0}
+  .et-lista::before{right:13px;bottom:auto}
+  .et-lista::after{height:2px;width:max(0px,calc(var(--fim-x,13px) - 13px));transition:width .55s var(--mola)}
+  .et-pt.inicio-cap{margin:0 0 0 8px}
+  .et-rot{display:none}
+  .et-seta{width:32px;height:32px}
+  .et-seta svg{transform:rotate(-90deg)}
+  .et-seta.desce svg{transform:rotate(90deg)}
+  .et-dica{right:50%;bottom:calc(100% + 10px);transform:translate(50%,6px)}
+  .et-dica.ver{transform:translate(50%,0)}
+  /* a barra sai do caminho enquanto a página desce e volta ao subir */
+  .etapas{opacity:1}
+  body.trilha-recolhida .etapas{transform:translate(50%,calc(100% + 24px))}
+  /* V2 empilhada: uma frente embaixo da outra, em duas colunas, com o
+     destaque na largura toda e a descrição sempre visível nele */
+  .eco2{grid-template-columns:1fr;gap:30px}
+  .eco2-divisa{display:none}
+  .eco2-frente.dir .eco2-cab{text-align:left}
+  .eco2-grade,.eco2-frente.dir .eco2-grade{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:minmax(150px,auto)}
+  .ecard.destaque,.eco2-frente.dir .ecard.destaque{grid-column:1/-1;grid-row:span 1;min-height:210px}
   .grade,.g-2,.g-3,.g-4{grid-template-columns:1fr}
   .mcard-head{flex-direction:column;gap:14px}.medalhao{width:100%;min-height:88px}
   .medalhao.capa{width:100%;min-height:0}
@@ -530,12 +661,12 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
   </button>
   <aside class="trilho" id="trilho">
     <div class="marca">
-      <img class="selo" src="olho-amarelo.svg" alt="" width="42" height="27">
-      <div class="marca-txt"><b>AUVP Escola</b><span>Apresentação geral</span></div>
+      <img class="marca-logo claro" src="logos/auvp-escola-horizontal-preto.svg" alt="AUVP Escola" width="132" height="50">
+      <img class="marca-logo escuro" src="logos/auvp-escola-horizontal-branco.svg" alt="AUVP Escola" width="132" height="50">
     </div>
     <nav class="nav" id="nav" aria-label="Seções da apresentação"></nav>
     <div class="rodape">
-      <a class="fbtn pdf" href="AUVP%20Escola%20-%202026.pdf" download="AUVP Escola - 2026.pdf" target="_blank" rel="noopener" title="Baixar a apresentação em PDF">
+      <a class="fbtn pdf" href="AUVP%20Escola.pdf" download="AUVP Escola.pdf" target="_blank" rel="noopener" title="Baixar a apresentação em PDF">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.2M7.4 10.2 12 14.8l4.6-4.6M4.5 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>
         <span class="fbtn-rot">Baixar PDF</span>
       </a>
@@ -557,6 +688,8 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
       <b id="topo-tit"></b>
+      <span class="topo-n" id="topo-n" aria-hidden="true"></span>
+      <span class="topo-prog" id="topo-prog"></span>
     </header>
 
 
@@ -565,21 +698,21 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
       <div class="faixa">        <h1>Mais do que um treinamento, somos uma comunidade.</h1>
         <p class="legenda">Nascemos da educação financeira e hoje acompanhamos você em cada momento da sua relação com o dinheiro.</p>
         <div class="numeros">
-          <div class="num"><b>+60 mil</b><span>clientes ativos</span></div>
-          <div class="num"><b>+55 mil</b><span>investidores formados</span></div>
-          <div class="num"><b>nº 1</b><span>Consultoria: 2º ano seguido no ranking BTG Pactual</span></div>
-          <div class="num"><b>+100 mil</b><span>contas abertas</span></div>
+          <div class="num"><b><em>+</em><i data-conta="60">60</i><em> mil</em></b><span>clientes ativos</span></div>
+          <div class="num"><b><em>+</em><i data-conta="55">55</i><em> mil</em></b><span>investidores formados</span></div>
+          <div class="num"><b><em>nº </em><i>1</i></b><span>Consultoria no ranking BTG Pactual,<br>2º&nbsp;ano&nbsp;seguido</span></div>
+          <div class="num"><b><em>+</em><i data-conta="100">100</i><em> mil</em></b><span>contas abertas</span></div>
         </div>
       </div></div></section>
 
 
     <section class="tela" id="t3"><div class="quadro midia foco in">
       <img class="bg" src="DSC01389-2560.jpg" alt="" decoding="async" fetchpriority="low">
-      <div class="faixa">        <p class="kicker">O produto</p>        <h1>O que é a AUVP Escola?</h1>
+      <div class="faixa">        <h1>O que é a AUVP Escola?</h1>
         <p class="legenda">A formação completa para você sair do zero e chegar à autonomia, com material, ferramentas e gente para tirar dúvida do lado.</p>
         <div class="numeros">
-          <div class="num"><b>+100</b><span>aulas gravadas, para assistir no seu ritmo</span></div>
-          <div class="num"><b>1 ano</b><span>de acesso ao curso, às lives e às ferramentas</span></div>
+          <div class="num"><b><em>+</em><i data-conta="100">100</i></b><span>aulas gravadas, para assistir no seu ritmo</span></div>
+          <div class="num"><b><i>1</i><em> ano</em></b><span>de acesso ao curso, às lives e às ferramentas</span></div>
         </div>
       </div></div></section>
 
@@ -609,7 +742,7 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
       <div class="cab"><h1>Material para estudar e aprender de verdade</h1></div>
       <div class="grade g-3">
         <a class="foto capa" href="https://drive.google.com/file/d/1mBxmeBt4iAHoRVUPYD2LtDDObSflENqe/view" target="_blank" rel="noopener noreferrer" style="--capa:url('capa%20modulo%203.jpg')"><span class="cimg"></span><span class="veu"></span><span class="acesso">Acessar<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span><div class="rot"><b>E-books</b><small>Guias completos para baixar e consultar quando quiser.</small></div></a>
-        <a class="foto capa" href="https://drive.google.com/file/d/1Zxw2LKEc2ESafeE5L62sOBNekgujpzx6/view" target="_blank" rel="noopener noreferrer" style="--capa:url('https://lwfiles.mycourse.app/65f0605f45786c13a78a559b-public/57fb9691a06a2815fcca7a5012b8abf9.png')"><span class="cimg"></span><span class="veu"></span><span class="acesso">Acessar<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span><div class="rot"><b>Mapas mentais</b><small>O resumo visual de cada aula, tudo em uma página.</small></div></a>
+        <a class="foto capa" href="https://drive.google.com/file/d/1Zxw2LKEc2ESafeE5L62sOBNekgujpzx6/view" target="_blank" rel="noopener noreferrer" style="--capa:url('https://lwfiles.mycourse.app/65f0605f45786c13a78a559b-public/57fb9691a06a2815fcca7a5012b8abf9.png')" data-foco="mapa"><span class="cimg"></span><span class="veu"></span><span class="acesso">Acessar<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span><div class="rot"><b>Mapas mentais</b><small>O resumo visual de cada aula, tudo em uma página.</small></div></a>
         <a class="foto capa" href="https://drive.google.com/file/d/1a5zCT1HsacB8jHgA-P2_xiny7Gzj9grW/view" target="_blank" rel="noopener noreferrer" style="--capa:url('capa%20caderno%20ex%202.jpg')"><span class="cimg"></span><span class="veu"></span><span class="acesso">Acessar<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span><div class="rot"><b>Cadernos de exercício</b><small>Pratique o que aprendeu em cada módulo para fixar o conteúdo.</small></div></a>
       </div>
     </div></section>
@@ -643,6 +776,16 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
       <div class="eco-grupos" id="eco-grupos"></div>
     </div></section>
 
+    <!-- ecossistema V2: o mesmo conteúdo da V1 em mosaico de fotos -->
+    <section class="tela" id="t10b"><div class="eco-wrap in">
+      <div class="eco-topo">
+        <p class="mote">Pensou em dinheiro, pensou na AUVP.</p>
+        <h1>Um <span class="dourado">ecossistema</span>, duas frentes.</h1>
+      </div>
+      <div class="eco2" id="eco2"></div>
+      <p class="eco2-dica"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6.5 6.5 0 0 1-6.5 6.5h-.6a6 6 0 0 1-4.6-2.2L4.6 15a1.5 1.5 0 0 1 2.3-1.9L9 15.5"/></svg>Clique em cada solução para conhecer mais</p>
+    </div></section>
+
     
 
 
@@ -655,17 +798,25 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 
     <section class="tela" id="t17"><div class="quadro midia foco in">
       <img class="bg" src="DSC01355-2560.webp" alt="" decoding="async" fetchpriority="low">
-      <div class="faixa" style="text-align:center"><p class="kicker">Bem-vindo à AUVP</p>        <h1 class="copy" data-slot="titulo" style="margin:0 auto;max-width:24ch">Vamos juntos construir sua liberdade financeira.</h1>
-        <a class="baixar" href="AUVP%20Escola%20-%202026.pdf" download="AUVP Escola - 2026.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.2M7.4 10.2 12 14.8l4.6-4.6M4.5 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>Baixar a apresentação em PDF</a>
+      <div class="faixa" style="text-align:center">        <h1 class="copy" data-slot="titulo" style="margin:0 auto;max-width:24ch">Vamos juntos construir sua liberdade financeira.</h1>
+        <a class="baixar" href="AUVP%20Escola.pdf" download="AUVP Escola.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.2M7.4 10.2 12 14.8l4.6-4.6M4.5 16.5v2.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/></svg>Baixar a apresentação em PDF</a>
       </div></div></section>
     </main>
 </div>
+<nav class="etapas" id="etapas" aria-label="Etapas da apresentação">
+  <button type="button" class="et-seta" data-passo="-1" aria-label="Seção anterior"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
+  <ol class="et-lista" id="et-lista"></ol>
+  <button type="button" class="et-seta desce" data-passo="1" aria-label="Próxima seção"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
+  <span class="et-dica" id="et-dica" aria-hidden="true">Role para avançar</span>
+</nav>
 <div class="fundo" id="fundo"></div>
 <div class="ajuda" id="ajuda" role="dialog" aria-label="Como navegar">
   <b>Como navegar</b>
   <ul>
     <li><span><kbd>&larr;</kbd><kbd>&rarr;</kbd></span>Seção anterior e próxima, na ordem da apresentação</li>
-    <li><span><kbd>1</kbd></span>Números de 1 a 9 levam direto a cada seção, na ordem do menu</li>
+    <li><span class="ic"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="5"/><path d="M12 7v3"/></svg></span>Role até o fim da seção para ir à próxima; no celular, deslize para o lado</li>
+    <li><span class="ic"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span>A trilha de pontos mostra onde você está; clique num ponto para ir direto</li>
+    <li><span><kbd>1</kbd></span>Os números levam direto a cada seção, na ordem do menu (10: digite 1 e 0)</li>
     <li><span><kbd>Esc</kbd></span>Fecha o que estiver aberto: card, imagem ou menu</li>
     <li><span class="ic"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>O ícone de menu no canto superior esquerdo abre as seções</li>
     <li><span class="ic"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.2 15.2 20 20"/></svg></span>Tags com lupa abrem uma imagem ali mesmo</li>
@@ -679,10 +830,11 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
   </figure>
 </div>
 <div class="eco-modal-cena" id="eco-modal-cena" aria-hidden="true">
-  <div class="eco-modal" id="eco-modal" role="dialog" aria-modal="true">
+  <div class="eco-modal" id="eco-modal" role="dialog" aria-modal="true" aria-labelledby="eco-modal-tit">
     <button class="eco-modal-x" aria-label="Fechar">&times;</button>
     <img class="eco-modal-img" id="eco-modal-img" alt="">
-    <div class="eco-modal-corpo"><b id="eco-modal-tit"></b><p id="eco-modal-desc"></p></div>
+    <div class="eco-modal-corpo"><b id="eco-modal-tit"></b><p id="eco-modal-desc"></p>
+      <a class="eco-modal-link" id="eco-modal-link" target="_blank" rel="noopener noreferrer">Conhecer<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></a></div>
   </div>
 </div>
 <script type="application/json" id="crono">[{"index":1,"title":"Preparando seu cérebro","subtitle":"Mindset e fundamentos","description":"Muda sua relação com o dinheiro e prepara a mente para investir.","totalDuration":"2h 18min","lessons":[{"number":"Aula 01","title":"Preparando seu cérebro","duration":"04:49"},{"number":"Aula 02","title":"Por que os ricos ficam cada vez mais ricos?","duration":"13:37"},{"number":"Aula 03","title":"Crenças limitantes","duration":"17:09"},{"number":"Aula 04","title":"Juros Compostos","duration":"15:43"},{"number":"Aula 05","title":"O que é Liberdade Financeira?","duration":"20:07"},{"number":"Extra","title":"AUVP Crédito","duration":"02:42"},{"number":"Aula 06","title":"Como não cair em golpes","duration":"23:28"},{"number":"Aula 07","title":"Metade salada e metade droga","duration":"07:19"},{"number":"Aula 08","title":"Autoajuda é o caralho","duration":"11:09"},{"number":"Aula 09","title":"Pare de procrastinar","duration":"13:19"},{"number":"Extra","title":"Onde investir sua reserva de emergência","duration":"11:16"}]},{"index":2,"title":"Organize seus gastos","subtitle":"Vida financeira no controle","description":"Orçamento, dívidas e o caminho até o primeiro milhão.","totalDuration":"1h 24min","lessons":[{"number":"Aula 01","title":"Finanças pessoais","duration":"20:30"},{"number":"Aula 02","title":"Como usar seu cartão de crédito","duration":"19:00"},{"number":"Aula 03","title":"Como resolver as dívidas","duration":"05:55"},{"number":"Aula 04","title":"Financiamento de imóvel faz sentido?","duration":"19:39"},{"number":"Aula 05","title":"Consórcios SÃO TOPS?","duration":"09:30"},{"number":"Aula 06","title":"Viver de renda e primeiro milhão","duration":"10:17"}]},{"index":3,"title":"Renda Fixa","subtitle":"Tesouro, CDBs, LCIs e mais","description":"Tesouro, CDBs, LCIs e todo o universo da renda fixa.","totalDuration":"5h 00min","lessons":[{"number":"Aula 01","title":"O que é Renda Fixa?","duration":"11:40"},{"number":"Aula 02","title":"Escolhendo uma corretora","duration":"13:20"},{"number":"Aula 03","title":"Introdução ao Tesouro Direto","duration":"17:55"},{"number":"Aula 04","title":"Tesouro Selic","duration":"15:49"},{"number":"Aula 05","title":"Tesouro pré-fixado","duration":"13:51"},{"number":"Aula 06","title":"Tesouro IPCA+","duration":"07:50"},{"number":"Aula 07","title":"Marcação a mercado","duration":"03:32"},{"number":"Aula 08","title":"Marcação a mercado - Parte 2","duration":"18:00"},{"number":"Aula 09","title":"Tesouro Prefixado e IPCA+ com Juros Semestrais","duration":"05:19"},{"number":"Extra","title":"Conhecendo nossos ETF's - AUPO11","duration":"20:36"},{"number":"Extra","title":"Conhecendo nossos ETF's - AREA11","duration":"13:38"},{"number":"Aula 10","title":"Tesouro Educa+ e Renda+","duration":"06:31"},{"number":"Aula 11","title":"CDBs, LCs e RDBs","duration":"27:00"},{"number":"Aula 12","title":"LCI e LCA","duration":"08:15"},{"number":"Aula 13","title":"CRI's e CRA's","duration":"10:53"},{"number":"Aula 14","title":"Debentures","duration":"17:21"},{"number":"Aula 15","title":"Previdência Privada","duration":"11:19"},{"number":"Aula 16","title":"Fundos de Investimento","duration":"24:38"},{"number":"Aula 17","title":"Contrafluxo","duration":"26:07"},{"number":"Aula 18","title":"Montando uma carteira de Renda Fixa","duration":"07:55"}]},{"index":4,"title":"Renda Variável","subtitle":"Ações, FIIs, ETFs","description":"Ações, FIIs e ETFs: como montar sua carteira de renda variável.","totalDuration":"9h 39min","lessons":[{"number":"Aula 01","title":"Introdução à Renda Variável","duration":"03:28"},{"number":"Aula 02","title":"Bolsa de Valores","duration":"17:26"},{"number":"Aula 03","title":"Ações: Preço x Valor","duration":"10:24"},{"number":"Aula 04","title":"Abertura de capital (IPO)","duration":"20:43"},{"number":"Aula 05","title":"Nomenclaturas e termos da bolsa","duration":"27:05"},{"number":"Aula 06","title":"As escolas de investimento","duration":"27:41"},{"number":"Aula 07","title":"Analisando ações","duration":"07:23"},{"number":"Aula 08","title":"Análise de ações - Parte 2","duration":"50:50"},{"number":"Aula 09","title":"Análise de ações - Parte 3","duration":"31:27"},{"number":"Aula 10","title":"Análise de ações - Parte 4","duration":"33:05"},{"number":"Aula 11","title":"Comprando ações, na prática","duration":"09:40"},{"number":"Aula 12","title":"Inserindo no diagrama","duration":"33:19"},{"number":"Aula 13","title":"Pra que serve o preço médio?","duration":"16:02"},{"number":"Aula 14","title":"Proventos","duration":"17:56"},{"number":"Aula 15","title":"Dividendos e Data EX","duration":"19:38"},{"number":"Aula 16","title":"Desdobramentos e Grupamentos","duration":"11:30"},{"number":"Aula 17","title":"Aluguel de Ações","duration":"10:30"},{"number":"Aula 18","title":"Índices e ETF's","duration":"13:51"},{"number":"Aula 19","title":"Fundos Imobiliários","duration":"21:38"},{"number":"Aula 20","title":"Como analisar FIIs na prática? Parte 2","duration":"10:21"},{"number":"Aula 21","title":"Analisando um FII na prática - Parte 3","duration":"21:17"},{"number":"Aula 22","title":"Como identificar FIIs de qualidade - Parte 4","duration":"16:41"},{"number":"Aula 23","title":"Fiagro e fundos de papéis","duration":"19:02"},{"number":"Aula 24","title":"Fi-Infra","duration":"09:54"},{"number":"Extra","title":"Small Caps","duration":"32:26"},{"number":"Aula 25","title":"O método burro","duration":"08:23"},{"number":"Aula 26","title":"Como montar uma carteira de investimentos","duration":"21:09"},{"number":"Extra","title":"Armadilhas do Mercado Financeiro","duration":"21:40"}]},{"index":5,"title":"Reserva de valor","subtitle":"","totalDuration":"2h 06min","tags":["7 aulas padrão","1 aula extra","2h 06min"],"description":"Ouro e Bitcoin como reserva de valor da sua carteira.","lessons":[{"number":"Aula 01","title":"O que é uma reserva de valor, e qual a sua função?","duration":"19:11"},{"number":"Aula 02","title":"Comprando ouro físico","duration":"14:03"},{"number":"Aula 03","title":"Como investir em ouro","duration":"11:49"},{"number":"Aula 04","title":"História do bitcoin","duration":"19:57"},{"number":"Aula 05","title":"Por que ter Bitcoin?","duration":"12:09"},{"number":"Aula 06","title":"Qual o momento certo de comprar Bitcoin?","duration":"07:45"},{"number":"Aula 07","title":"Armazenando e protegendo seus Bitcoins","duration":"28:11"},{"number":"Extra","title":"Os ciclos ESTRANHOS do Bitcoin","duration":"13:51"}]},{"index":6,"title":"Investindo no exterior","subtitle":"","totalDuration":"3h 13min","tags":["12 aulas padrão","3h 13min"],"description":"Como investir no exterior: ETFs, REITs, stocks e renda fixa nos EUA.","lessons":[{"number":"Aula 01","title":"Por que investir no exterior?","duration":"25:09"},{"number":"Aula 02","title":"Como funciona o mercado americano?","duration":"13:19"},{"number":"Aula 03","title":"Mercado dos EUA x Brasil","duration":"13:29"},{"number":"Aula 04","title":"ETFs Internacionais","duration":"14:36"},{"number":"Aula 05","title":"ETFs Internacionais - Parte 2","duration":"18:02"},{"number":"Aula 06","title":"ETFs Internacionais - Parte 3","duration":"12:26"},{"number":"Aula 07","title":"REITs","duration":"25:33"},{"number":"Aula 08","title":"Stocks (Ações Americanas)","duration":"13:38"},{"number":"Aula 09","title":"Stocks (Ações Americanas) - Setor de Consumo","duration":"16:09"},{"number":"Aula 10","title":"Stocks (Ações Americanas) - Setor de Energia","duration":"16:35"},{"number":"Aula 11","title":"Stocks (Ações Americanas) - Setor de Tecnologia","duration":"18:06"},{"number":"Aula 12","title":"Renda fixa nos Estados Unidos","duration":"19:07"}]},{"index":7,"title":"O começo","subtitle":"","totalDuration":"1h 6min","tags":["4 aulas padrão","1h 6min"],"description":"Coloque em prática: monte e gerencie a sua carteira.","lessons":[{"number":"Aula 01","title":"Operacionalizando sua Carteira","duration":"19:51"},{"number":"Aula 02","title":"Corrigindo os erros da sua carteira","duration":"12:39"},{"number":"Aula 03","title":"O que a AUVP ainda pode fazer por você?","duration":"16:31"},{"number":"Aula 04","title":"Planejando sua liberdade financeira","duration":"17:09"}]},{"index":null,"title":"Bônus: Imposto de Renda","subtitle":"","totalDuration":"3h 13min","tags":["12 aulas padrão","3h 13min"],"description":"Declare seus investimentos e pague os tributos corretamente.","nota":"Este módulo será regravado anualmente, de acordo com mudanças na dinâmica de IR.","lessons":[{"number":"Aula 01","title":"O que é Imposto de Renda?","duration":"17:41"},{"number":"Aula 02","title":"Preparando a declaração","duration":"09:05"},{"number":"Aula 03","title":"O que é e como funciona o IR no Brasil","duration":"24:38"},{"number":"Aula 04","title":"Declarando ações","duration":"24:12"},{"number":"Aula 05","title":"Imposto de Renda na Renda Fixa","duration":"17:00"},{"number":"Aula 06","title":"Imposto de Renda nos Fundos de Investimento","duration":"05:32"},{"number":"Aula 07","title":"Imposto de Renda nos FIIs, Fiagros e FI-Infras","duration":"14:03"},{"number":"Aula 08","title":"Declarando dividendos, JCP, rendimentos e bonificações","duration":"21:24"},{"number":"Aula 09","title":"Investimentos Internacionais","duration":"19:25"},{"number":"Aula 10","title":"Criptomoedas","duration":"24:45"},{"number":"Aula 11","title":"Como gerar um DARF?","duration":"06:41"},{"number":"Aula 12","title":"Declaração de Autônomo com Carnê-Leão","duration":"08:17"}]}]</script>
@@ -697,43 +849,46 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 const NAV=[
   ['Contexto',[
     ['t1','Quem somos nós?','1'],
-    ['t10','Ecossistema · órbitas','2']
+    ['t10','Ecossistema · órbitas V1','2'],
+    ['t10b','Ecossistema · V2','3']
   ]],
   ['O Produto',[
-    ['t3','A Escola','3'],
-    ['t5','Módulos do treinamento','4'],
-    ['t4','Dinâmica das aulas','5'],
-    ['tmat','Materiais de apoio','6'],
-    ['t6','Ferramentas','7'],
-    ['t7','Lives, comunidade e app','8']
+    ['t3','A Escola','4'],
+    ['t5','Módulos do treinamento','5'],
+    ['t4','Dinâmica das aulas','6'],
+    ['tmat','Materiais de apoio','7'],
+    ['t6','Ferramentas','8'],
+    ['t7','Lives, comunidade e app','9']
   ]],
   ['Fechamento',[
-    ['t17','Boas-vindas','9']
+    ['t17','Boas-vindas','10']
   ]]
 ];
 
 /* ============================================================
    ECOSSISTEMA
-   Cada produto é um nó da tela principal e uma tela própria.
+   Dado único das duas versões da tela (órbitas V1 e mosaico V2).
+   url: a página do produto (a mesma do PDF), aberta pelo popup.
+   destaque: o card maior de cada frente no mosaico da V2.
    ============================================================ */
 const ECOS=[
   {grupo:'Educacional',mote:'Você aprende\nna prática',curto:'Escola',
    itens:[
-    {t:'Módulos Avançados',d:'Análise de Setores, Geopolítica, Indicadores e Aulas Técnicas para quem quer ir além da grade principal.',img:'modulos avançados.jpg'},
-    {t:'Ferramentas',d:'Quatro ferramentas próprias para apoiar seus estudos e a gestão da carteira.',img:'https://raw.githubusercontent.com/design-auvp/projetodelta/main/Analise-de-ações-e-indicadores-AUVP-Analítica.png',topo:true,alt:'trilha pro.png'},
-    {t:'Atualização de Mercado - Semanal',d:'Toda segunda-feira, às 19h, ao vivo com o Raul Sena comentando o que mexeu com o mercado.',img:'lives.jpg'},
-    {t:'A Escola',d:'O treinamento completo da AUVP: mais de 100 aulas, sete módulos para você ir do zero à liberdade financeira.',img:'raul explicativo.png',alt:'aulas att.png'},
-    {t:'Módulo Internacional',d:'Aprenda sobre Renda Fixa Internacional, stocks, REITs e Private Equity: como investir fora do Brasil.',img:'https://www.remessaonline.com.br/blog/wp-content/uploads/2024/07/como-investir-no-exterior.jpg',alt:'internacional.jpg'}
+    {t:'Módulos Avançados',url:'https://www.auvp.com.br/#modulos-avancados',d:'Análise de Setores, Geopolítica, Indicadores e Aulas Técnicas para quem quer ir além da grade principal.',img:'modulos avançados.jpg'},
+    {t:'Ferramentas',url:'https://www.auvp.com.br/#auvp-methodology-section',d:'Quatro ferramentas próprias para apoiar seus estudos e a gestão da carteira.',img:'https://raw.githubusercontent.com/design-auvp/projetodelta/main/Analise-de-ações-e-indicadores-AUVP-Analítica.png',topo:true,alt:'trilha pro.png'},
+    {t:'Atualização de Mercado - Semanal',url:'https://comunidade.auvp.com.br/lives/',d:'Toda segunda-feira, às 19h, ao vivo com o Raul Sena comentando o que mexeu com o mercado.',img:'lives.jpg'},
+    {t:'A Escola',url:'https://www.auvp.com.br/',destaque:true,d:'O treinamento completo da AUVP: mais de 100 aulas, sete módulos para você ir do zero à liberdade financeira.',img:'raul explicativo.png',alt:'aulas att.png'},
+    {t:'Módulo Internacional',url:'https://www.auvp.com.br/#modulos-avancados',d:'Aprenda sobre Renda Fixa Internacional, stocks, REITs e Private Equity: como investir fora do Brasil.',img:'https://www.remessaonline.com.br/blog/wp-content/uploads/2024/07/como-investir-no-exterior.jpg',alt:'internacional.jpg'}
    ]},
   {grupo:'Banking',mote:'Nós cuidamos da sua\nvida financeira',curto:'Banking',
    itens:[
-    {t:'Consultoria',d:'Nº 1 no ranking do BTG Pactual, pelo segundo ano seguido.',img:'https://www.maisnovela.com.br/wp-content/uploads/2026/03/AUVP.png',alt:'comunidade pro.png'},
-    {t:'Conta com cartão próprio',d:'Conta, cartão e atendimento 100% AUVP, sujeito à análise de crédito.',img:'https://pbs.twimg.com/media/GxSRuKfXMAAQPsS.jpg',alt:'capa modulo 3.jpg'},
-    {t:'Crédito',d:'Comparação com mais de 20 bancos, sem liquidar seus investimentos.',img:'https://cdn.asupernova.com.br/lp-auvp/vite/onde sua vida financeira se resolve mobile.webp',alt:'simulados pro.png'},
-    {t:'Câmbio',d:'Enviar, receber ou investir no exterior com custo transparente.',img:'https://www.remessaonline.com.br/blog/wp-content/uploads/2022/04/servico-de-cambio.png',alt:'cripto.jpg'},
-    {t:'Seguros',d:'Cotação em até 6 seguradoras, sem viés de interesse.',img:'https://images.pexels.com/photos/20880348/pexels-photo-20880348.jpeg',alt:'thumb INDICADORES.jpg'},
-    {t:'Wealth',d:'Blindagem patrimonial, governança e planejamento sucessório.',img:'https://oespecialista.safra.com.br/wp-content/uploads/2026/05/wealth-management-nos-investimentos.jpg',alt:'analitica.jpg'},
-    {t:"ETF's próprios",d:'AUVP11, AUPO11, AREA11 e ABTC11, geridos e baseados em metodologias próprias da AUVP.',img:'https://cdn.asupernova.com.br/lp-auvp/vite/AUVP-0509.webp',alt:'cotações.png'}
+    {t:'Consultoria',url:'https://auvpcapital.com.br/',destaque:true,d:'Nº 1 no ranking do BTG Pactual, pelo segundo ano seguido.',img:'https://www.maisnovela.com.br/wp-content/uploads/2026/03/AUVP.png',alt:'comunidade pro.png'},
+    {t:'Conta com cartão próprio',url:'https://www.auvp.com.br/#ecosys-highlight',d:'Conta, cartão e atendimento 100% AUVP, sujeito à análise de crédito.',img:'https://pbs.twimg.com/media/GxSRuKfXMAAQPsS.jpg',alt:'capa modulo 3.jpg'},
+    {t:'Crédito',url:'https://auvpcapital.com.br/credito',d:'Comparação com mais de 20 bancos, sem liquidar seus investimentos.',img:'https://cdn.asupernova.com.br/lp-auvp/vite/onde sua vida financeira se resolve mobile.webp',alt:'simulados pro.png'},
+    {t:'Câmbio',url:'https://auvpcapital.com.br/cambio',d:'Enviar, receber ou investir no exterior com custo transparente.',img:'https://www.remessaonline.com.br/blog/wp-content/uploads/2022/04/servico-de-cambio.png',alt:'cripto.jpg'},
+    {t:'Seguros',url:'https://auvpcapital.com.br/seguros/',d:'Cotação em até 6 seguradoras, sem viés de interesse.',img:'https://images.pexels.com/photos/20880348/pexels-photo-20880348.jpeg',alt:'thumb INDICADORES.jpg'},
+    {t:'Wealth',url:'https://auvpcapital.com.br/wealth',d:'Blindagem patrimonial, governança e planejamento sucessório.',img:'https://oespecialista.safra.com.br/wp-content/uploads/2026/05/wealth-management-nos-investimentos.jpg',alt:'analitica.jpg'},
+    {t:"ETF's próprios",url:'https://www.auvpetfs.com.br/',d:'AUVP11, AUPO11, AREA11 e ABTC11, geridos e baseados em metodologias próprias da AUVP.',img:'https://cdn.asupernova.com.br/lp-auvp/vite/AUVP-0509.webp',alt:'cotações.png'}
    ]}
 ];
 
@@ -774,6 +929,57 @@ $('#nav').innerHTML=NAV.map(function(g){
   }).join('');
 }).join('');
 
+/* ---------- trilha de etapas ----------
+   Um ponto por tela, na ordem do NAV, com um respiro entre capítulos.
+   O clique usa o mesmo data-alvo do menu. */
+const etLista=$('#et-lista');
+etLista.innerHTML=NAV.map(function(g){
+  return g[1].filter(function(it){return !(it[3]&&it[3].sub)}).map(function(it,k){
+    var n=ORDEM.indexOf(it[0])+1;
+    return '<li><button type="button" class="et-pt'+(k===0&&n>1?' inicio-cap':'')+'" data-alvo="'+it[0]+'" aria-label="'+esc(n+'. '+it[1])+'">'
+      +'<span class="et-rot"><small>'+esc(g[0])+' · '+n+'/'+ORDEM.length+'</small>'+esc(it[1])+'</span></button></li>';
+  }).join('');
+}).join('');
+/* o fio dourado vai do primeiro ponto até o atual */
+function marcaEtapas(id){
+  var i=ORDEM.indexOf(id),pt=null;
+  etLista.querySelectorAll('.et-pt').forEach(function(b,k){
+    b.classList.toggle('on',k===i);b.classList.toggle('feito',k<i);
+    b.setAttribute('aria-current',k===i?'step':'false');
+    if(k===i)pt=b;
+  });
+  if(pt){
+    etLista.style.setProperty('--fim-y',(pt.offsetTop+pt.offsetHeight/2)+'px');
+    etLista.style.setProperty('--fim-x',(pt.offsetLeft+pt.offsetWidth/2)+'px');
+  }
+  var et=$('#etapas');et.classList.add('acesa');
+  clearTimeout(marcaEtapas.t);marcaEtapas.t=setTimeout(function(){et.classList.remove('acesa')},1400);
+  var setas=document.querySelectorAll('.et-seta');
+  setas[0].disabled=i<=0;setas[1].disabled=i>=ORDEM.length-1;
+  setas[0].title=i>0?'Anterior: '+ROTULOS[ORDEM[i-1]]:'';
+  setas[1].title=i<ORDEM.length-1?'Próxima: '+ROTULOS[ORDEM[i+1]]:'';
+}
+document.querySelectorAll('.et-seta').forEach(function(b){
+  b.addEventListener('click',function(){passo(+b.dataset.passo)});
+});
+window.addEventListener('resize',function(){marcaEtapas(atual)});
+
+/* números da régua contando de zero quando a tela entra, um depois do
+   outro; com movimento reduzido eles já aparecem no valor final */
+function contaNumeros(id){
+  var reduz=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('#'+id+' [data-conta]').forEach(function(el,k){
+    var fim=+el.dataset.conta,ini=performance.now()+350+k*140;
+    if(reduz){el.textContent=fim;return}
+    el.textContent='0';
+    requestAnimationFrame(function quadro(t){
+      var p=Math.min(1,Math.max(0,(t-ini)/1100));
+      el.textContent=Math.round(fim*(1-Math.pow(1-p,3)));
+      if(p<1)requestAnimationFrame(quadro);
+    });
+  });
+}
+
 /* ============================================================
    NAVEGAÇÃO
    ============================================================ */
@@ -784,6 +990,7 @@ let atual=ORDEM[0];
 function ir(id,semHash){
   if(!document.getElementById(id)) id=ORDEM[0];
   atual=id;
+  var i=ORDEM.indexOf(id);
   document.querySelectorAll('.tela').forEach(function(t){t.classList.toggle('ativa',t.id===id)});
   document.querySelectorAll('.item').forEach(function(b){
     var on=b.dataset.alvo===id&&!b.dataset.ancora;b.classList.toggle('on',on);
@@ -791,12 +998,22 @@ function ir(id,semHash){
     if(on&&b.scrollIntoView)b.scrollIntoView({block:'nearest'});
   });
   document.querySelectorAll('.bloco').forEach(function(b){b.classList.toggle('on',b.dataset.alvo===id)});
-  var i=ORDEM.indexOf(id);
+  marcaEtapas(id);
+  contaNumeros(id);
+  /* telas com foto ou vídeo de fundo: o ícone do menu fica branco */
+  document.body.classList.toggle('tela-escura',!!document.querySelector('#'+id+' .quadro.midia'));
+  document.body.classList.remove('trilha-recolhida');ultY=0;
   $('#progresso').style.transform='scaleX('+((i+1)/ORDEM.length).toFixed(4)+')';
-  $('#topo-tit').textContent=ROTULOS[id]||'';
+  var tit=$('#topo-tit');tit.textContent=ROTULOS[id]||'';
+  tit.classList.remove('troca');void tit.offsetWidth;tit.classList.add('troca');
+  $('#topo-n').innerHTML='<i>'+String(i+1).padStart(2,'0')+'</i>/'+String(ORDEM.length).padStart(2,'0');
+  $('#topo-prog').style.transform='scaleX('+((i+1)/ORDEM.length).toFixed(4)+')';
   document.title=ROTULOS[id]+' · AUVP Escola - apresentação';
   palco.scrollTop=0;window.scrollTo(0,0);
   var a=document.getElementById(id);if(a)a.scrollTop=0;
+  obsRolagem.disconnect();
+  if(a&&a.firstElementChild)obsRolagem.observe(a.firstElementChild);
+  ajustaRolagem();
   gaveta(false);
   if(typeof fechaVisor==='function')fechaVisor();
   if(typeof abreAjuda==='function')abreAjuda(false);
@@ -811,6 +1028,18 @@ function ir(id,semHash){
   /* hash em vez de pushState: funciona também com o arquivo aberto localmente (file://) */
   if(!semHash&&location.hash!=='#/'+id)location.hash='/'+id;
 }
+/* a barra de rolagem só aparece onde o conteúdo passa da tela de verdade.
+   A medida é pelo layout (offsetHeight ignora transform), e não pelo
+   scrollHeight, que cresce durante a animação de entrada e fazia a barra
+   piscar e a tela pular de largura. No celular quem rola é a página. */
+function ajustaRolagem(){
+  var t=document.getElementById(atual),c=t&&t.firstElementChild;
+  if(!c)return;
+  if(window.innerWidth<=860){t.style.overflowY='';return}
+  t.style.overflowY=c.offsetHeight>t.clientHeight+1?'auto':'hidden';
+}
+const obsRolagem=new ResizeObserver(ajustaRolagem);
+window.addEventListener('resize',ajustaRolagem);
 function passo(d){var i=ORDEM.indexOf(atual)+d;if(i>=0&&i<ORDEM.length)ir(ORDEM[i])}
 
 /* o vídeo de fundo só carrega e roda na tela que está no ar */
@@ -992,8 +1221,8 @@ document.addEventListener('keydown',function(e){
   if(alvo&&(alvo.isContentEditable||/^(input|textarea|select)$/i.test(alvo.tagName)))return;
   var k=e.key.toLowerCase();
   if(k==='escape'){if(ajuda.classList.contains('ver')){abreAjuda(false);return}if(cena.classList.contains('ver')){fechaVisor();return}if(ecoCena.classList.contains('ver')){fechaEcoModal();return}if(document.body.classList.contains('gaveta')){gaveta(false)}return}
-  if(k==='arrowright'){passo(1);return}
-  if(k==='arrowleft'){passo(-1);return}
+  if(k==='arrowright'||k==='pagedown'){e.preventDefault();passo(1);return}
+  if(k==='arrowleft'||k==='pageup'){e.preventDefault();passo(-1);return}
   /* o sumário passa de dez telas: um dígito leva na hora, e um segundo logo
      em seguida corrige para a tela de dois dígitos */
   if(/^[0-9]$/.test(k)){
@@ -1006,6 +1235,75 @@ document.addEventListener('keydown',function(e){
   }
   if(TECLAS[k]){e.preventDefault();ir(TECLAS[k])}
 });
+
+/* ============================================================
+   ROLAGEM E GESTOS
+   A roda (ou o trackpad) troca de tela só quando o conteúdo da tela
+   já chegou ao fim, ou ao topo, na direção do gesto. Antes disso ela
+   rola a tela normalmente. A inércia do trackpad continua soltando
+   eventos depois do gesto: enquanto eles vierem em sequência, contam
+   como o mesmo gesto e não trocam de tela de novo.
+   ============================================================ */
+function rolavel(el,d){
+  for(;el&&el!==document.body;el=el.parentElement){
+    if(el.scrollHeight>el.clientHeight+1&&/(auto|scroll)/.test(getComputedStyle(el).overflowY)){
+      if(d>0?el.scrollTop+el.clientHeight<el.scrollHeight-1:el.scrollTop>0)return true;
+    }
+  }
+  return false;
+}
+function algoAberto(){
+  return document.body.classList.contains('gaveta')||ecoCena.classList.contains('ver')||cena.classList.contains('ver');
+}
+let rodaUlt=0,rodaSoma=0,rodaLivre=0,rodaRolou=false;
+palco.addEventListener('wheel',function(e){
+  var t=e.timeStamp,d=e.deltaY*(e.deltaMode===1?33:1),mesmo=t-rodaUlt<220;
+  rodaUlt=t;
+  /* no celular a página inteira rola; ali quem troca de tela é o gesto lateral */
+  if(window.innerWidth<=860||e.ctrlKey||Math.abs(e.deltaX)>Math.abs(e.deltaY)||algoAberto())return;
+  if(!mesmo){rodaSoma=0;rodaRolou=false}
+  if(t<rodaLivre){if(mesmo)rodaLivre=t+220;return}
+  if(rolavel(e.target,d)){rodaRolou=true;rodaSoma=0;return}
+  /* o gesto que acabou de rolar o conteúdo até o fim não vira página:
+     é preciso um gesto novo já na borda */
+  if(rodaRolou)return;
+  rodaSoma+=d;
+  if(Math.abs(rodaSoma)<50)return;
+  var antes=atual;passo(rodaSoma>0?1:-1);rodaSoma=0;
+  if(atual!==antes){rodaLivre=t+700;someDica()}
+},{passive:true});
+
+let toqueX=0,toqueY=0,toqueOk=false;
+palco.addEventListener('touchstart',function(e){
+  if(e.touches.length!==1){toqueOk=false;return}
+  toqueX=e.touches[0].clientX;toqueY=e.touches[0].clientY;toqueOk=true;
+},{passive:true});
+palco.addEventListener('touchend',function(e){
+  if(!toqueOk||algoAberto())return;toqueOk=false;
+  var dx=e.changedTouches[0].clientX-toqueX,dy=e.changedTouches[0].clientY-toqueY;
+  if(Math.abs(dx)>60&&Math.abs(dx)>1.6*Math.abs(dy))passo(dx<0?1:-1);
+},{passive:true});
+
+/* no celular a barra da trilha se recolhe enquanto a página desce e volta
+   quando ela sobe ou chega ao fim, para não ficar por cima da leitura */
+let ultY=0;
+window.addEventListener('scroll',function(){
+  if(window.innerWidth>860)return;
+  var y=window.scrollY,fim=y+window.innerHeight>=document.documentElement.scrollHeight-40;
+  if(fim||y<80)document.body.classList.remove('trilha-recolhida');
+  else if(y>ultY+6)document.body.classList.add('trilha-recolhida');
+  else if(y<ultY-6)document.body.classList.remove('trilha-recolhida');
+  else return;
+  ultY=y;
+},{passive:true});
+
+/* dica de rolagem: aparece só na primeira visita, ao lado da trilha */
+const DICA='auvp:dica-rolagem',etDica=$('#et-dica');
+function someDica(){etDica.classList.remove('ver');guarda(DICA,'1')}
+if(!le(DICA)){
+  setTimeout(function(){etDica.classList.add('ver')},1200);
+  setTimeout(someDica,7000);
+}
 
 /* ============================================================
    CONTEÚDO GERADO
@@ -1152,7 +1450,7 @@ function frenteEco(g,gi){
     +g.itens.map(function(it,k){
       var a=inicio+(n>1?280*k/(n-1):140);
       /* metade de cima do disco: o nome sobe em vez de descer */
-      return '<button type="button" class="eorb'+(Math.sin(a*Math.PI/180)<0?' cima':'')+'" aria-expanded="false" style="--a:'+a.toFixed(1)+'deg;--j:'+(gi*6+k)+'">'
+      return '<button type="button" class="eorb'+(Math.sin(a*Math.PI/180)<0?' cima':'')+'" data-url="'+esc(it.url||'')+'" aria-expanded="false" style="--a:'+a.toFixed(1)+'deg;--j:'+(gi*6+k)+'">'
         +'<span class="eorb-in"><img class="eorb-img" '+foto(it)+' alt="" loading="lazy"></span>'
         +'<b>'+esc(it.t)+'</b><small>'+esc(it.d)+'</small></button>';
     }).join('')
@@ -1165,11 +1463,30 @@ document.getElementById('eco-grupos').innerHTML=
   +'<span class="eco-fio"></span>'
   +frenteEco(ECOS[1],1);
 
+/* ---------- ecossistema V2: mosaico de fotos ----------
+   As duas frentes lado a lado, cada uma numa grade de fotos com o card
+   de destaque maior, separadas por um fio fino. Mesmo dado e mesmo popup da V1. */
+function frenteV2(g,gi){
+  var itens=g.itens.filter(function(it){return it.destaque}).concat(g.itens.filter(function(it){return !it.destaque}));
+  return '<div class="eco2-frente'+(gi?' dir':'')+'">'
+    +'<div class="eco2-cab"><b>'+esc(g.mote.replace(/\n/g,' '))+'</b></div>'
+    +'<div class="eco2-grade">'+itens.map(function(it,k){
+      return '<button type="button" class="ecard'+(it.destaque?' destaque':'')+'" data-url="'+esc(it.url||'')+'" aria-expanded="false" style="--j:'+(gi*6+k)+'">'
+        +'<img class="ecard-img" '+foto(it)+' alt="" loading="lazy">'
+        +'<span class="ecard-mais" aria-hidden="true">+</span>'
+        +'<span class="ecard-txt"><b>'+esc(it.t)+'</b><small>'+esc(it.d)+'</small></span></button>';
+    }).join('')+'</div></div>';
+}
+document.getElementById('eco2').innerHTML=
+  frenteV2(ECOS[0],0)
+  +'<span class="eco2-divisa" aria-hidden="true"></span>'
+  +frenteV2(ECOS[1],1);
+
 /* no mapa de órbitas, clique num item abre a foto e a descrição num
    popup que estica a partir do próprio card clicado (a caixa nunca fica invisível: ela
    já nasce do tamanho e na posição do card e anima até o tamanho
    final, como um FLIP) */
-var ecoCena=$('#eco-modal-cena'),ecoModal=$('#eco-modal'),ecoImg=$('#eco-modal-img'),ecoTit=$('#eco-modal-tit'),ecoDesc=$('#eco-modal-desc');
+var ecoCena=$('#eco-modal-cena'),ecoModal=$('#eco-modal'),ecoImg=$('#eco-modal-img'),ecoTit=$('#eco-modal-tit'),ecoDesc=$('#eco-modal-desc'),ecoLink=$('#eco-modal-link');
 var ecoOrigem=null;
 function transformDe(r){
   var fr=ecoModal.getBoundingClientRect();
@@ -1179,9 +1496,10 @@ function transformDe(r){
   return 'translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+sx.toFixed(3)+','+sy.toFixed(3)+')';
 }
 function abreEcoModal(btn){
-  ecoImg.src=btn.querySelector('.eorb-img').src;
+  ecoImg.src=btn.querySelector('img').src;
   ecoTit.textContent=btn.querySelector('b').textContent;
   ecoDesc.textContent=btn.querySelector('small').textContent;
+  if(btn.dataset.url){ecoLink.href=btn.dataset.url;ecoLink.hidden=false}else{ecoLink.removeAttribute('href');ecoLink.hidden=true}
   ecoOrigem=btn;
   ecoCena.classList.add('ver');ecoCena.setAttribute('aria-hidden','false');
   btn.setAttribute('aria-expanded','true');
@@ -1195,15 +1513,17 @@ function abreEcoModal(btn){
   ecoModal.offsetWidth;
   ecoModal.style.transition='';
   ecoModal.style.transform='translate(0,0) scale(1)';
+  /* o foco entra no popup (teclado e leitor de tela) e volta ao card no fechamento */
+  $('.eco-modal-x').focus({preventScroll:true});
 }
 function fechaEcoModal(){
   ecoCena.classList.remove('ver');ecoCena.setAttribute('aria-hidden','true');
-  document.querySelectorAll('.eorb[aria-expanded="true"]').forEach(function(b){b.setAttribute('aria-expanded','false')});
-  if(ecoOrigem)ecoModal.style.transform=transformDe(ecoOrigem.getBoundingClientRect())||'';
+  document.querySelectorAll('.eorb[aria-expanded="true"],.ecard[aria-expanded="true"]').forEach(function(b){b.setAttribute('aria-expanded','false')});
+  if(ecoOrigem){ecoModal.style.transform=transformDe(ecoOrigem.getBoundingClientRect())||'';ecoOrigem.focus({preventScroll:true})}
   ecoOrigem=null;
 }
 document.addEventListener('click',function(e){
-  var b=e.target.closest('.eorb');
+  var b=e.target.closest('.eorb,.ecard');
   if(b){e.preventDefault();abreEcoModal(b);return}
   if(!ecoCena.classList.contains('ver'))return;
   if(e.target.closest('.eco-modal-x')||!e.target.closest('#eco-modal'))fechaEcoModal();
@@ -1214,7 +1534,7 @@ document.addEventListener('click',function(e){
    animação e o movimento engasga */
 function preparaFotos(){
   /* as do ecossistema entram junto */
-  document.querySelectorAll('img.bg,.eorb-img').forEach(function(im){
+  document.querySelectorAll('img.bg,.eorb-img,.ecard-img').forEach(function(im){
     if(im.decode)im.decode().catch(function(){});
   });
 }

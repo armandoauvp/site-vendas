@@ -1,0 +1,22 @@
+# Fica fora do deploy: o que o site não usa.
+# A apresentação só precisa do index.htm, do PDF e dos arquivos que ele cita.
+
+# fonte do PDF (o PDF pronto continua no deploy)
+pdf/
+README.md
+.claude/
+
+# originais pesados que nenhuma página referencia (81 MB)
+DSC01355 copiar.webp
+DSC01389.jpg
+Raul Sena - Pr*mio BTG-1 (1).jpg
+agro 1.mp4
+capa live segunda.jpg
+escola agro.png
+foto alunos.jpg
+inteligencia de mercado.png
+internacional 1.mp4
+lives semanais.png
+masterclasses.jpg
+pro 1.mp4
+sempre 1.mp4
