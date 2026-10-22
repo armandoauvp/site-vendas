@@ -654,7 +654,7 @@ a.calc:hover .acesso{background:#fff;color:#09090b}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="escuro">
 <div class="app" id="app">
   <button class="abre-menu" id="abre-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="trilho" title="Menu">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1114,16 +1114,19 @@ $('#fundo').addEventListener('click',function(){gaveta(false)});
 /* ============================================================
    MODO CLARO / ESCURO E PAINEL DE INSTRUÇÕES
    ============================================================ */
-const TEMA='auvp:tema',btnTema=$('#btn-tema');
-function tema(escuro){
+/* o modo escuro é o padrão; só a escolha feita no botão fica guardada.
+   A chave é nova porque a antiga gravava "claro" em toda visita, e quem já
+   abriu o site ficaria preso no modo claro */
+const TEMA='auvp:tema-escolhido',btnTema=$('#btn-tema');
+function tema(escuro,escolha){
   document.body.classList.toggle('escuro',escuro);
   btnTema.setAttribute('aria-pressed',String(escuro));
   btnTema.querySelector('.fbtn-rot').textContent=escuro?'Modo claro':'Modo escuro';
-  btnTema.title=escuro?'Voltar para o modo claro':'Modo claro / escuro';
-  guarda(TEMA,escuro?'escuro':'claro');
+  btnTema.title=escuro?'Mudar para o modo claro':'Voltar para o modo escuro';
+  if(escolha)guarda(TEMA,escuro?'escuro':'claro');
 }
-tema(le(TEMA)==='escuro');
-btnTema.addEventListener('click',function(){tema(!document.body.classList.contains('escuro'))});
+tema(le(TEMA)!=='claro');
+btnTema.addEventListener('click',function(){tema(!document.body.classList.contains('escuro'),true)});
 
 const ajuda=$('#ajuda'),btnAjuda=$('#btn-ajuda');
 function posAjuda(){
